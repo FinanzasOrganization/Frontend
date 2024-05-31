@@ -1,0 +1,84 @@
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.bill-box {
+  margin: auto;
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  width: 300px;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #1e3a8a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.sidebar nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar nav ul li {
+  margin: 16px 0;
+}
+
+.sidebar nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.main-content {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.input-group label, .input-group input {
+  width: 100%;
+  display: block;
+}
+
+.input-group {
+  width: 45%;
+}
+
+
+.button-row {
+  margin-top: 10vh;
+}
+

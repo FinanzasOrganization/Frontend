@@ -1,0 +1,82 @@
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #1e3a8a;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.sidebar nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar nav ul li {
+  margin: 16px 0;
+}
+
+.sidebar nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.main-content {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.search-bar {
+  margin-bottom: 16px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.calendar-container {
+  width: 300px;
+  padding: 16px;
+  background-color: #f3f4f6;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-calendar {
+  margin-top: 16px;
+}
+
+.metodoPago.Crédito {
+  background-color: lightblue;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.metodoPago.Cuotas {
+  background-color: lightcoral;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.metodoPago.Contado {
+  background-color: lightpink;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
