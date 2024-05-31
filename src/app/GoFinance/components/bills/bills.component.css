@@ -82,3 +82,19 @@ header {
   margin-top: 10vh;
 }
 
+.mat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.header-style {
+  margin-bottom: 3rem;
+  color: rgb(0, 0, 0);
+}

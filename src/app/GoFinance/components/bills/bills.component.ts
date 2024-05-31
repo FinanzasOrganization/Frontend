@@ -16,6 +16,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {MatTooltip} from "@angular/material/tooltip";
+import { MatCard } from '@angular/material/card';
 
 @Component({
   selector: 'app-bills',
@@ -24,6 +25,7 @@ import {MatTooltip} from "@angular/material/tooltip";
     CurrencyPipe,
     MatButton,
     MatCalendar,
+    MatCard,
     MatCell,
     MatCellDef,
     MatColumnDef,
