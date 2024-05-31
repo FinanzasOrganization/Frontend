@@ -5,7 +5,7 @@ import { HistorialComponent } from './GoFinance/components/historial/historial.c
 import {BillsComponent} from "./GoFinance/components/bills/bills.component";
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: '/register', pathMatch: 'full' },
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'history', component: HistorialComponent },
