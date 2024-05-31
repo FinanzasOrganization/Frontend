@@ -1,0 +1,73 @@
+<div class="container">
+  <aside class="sidebar">
+    <nav>
+      <ul>
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#">Historial</a></li>
+        <li><a href="#">Clientes</a></li>
+        <li><a href="#">Configuración</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <h1>Clientes</h1>
+      <button mat-raised-button color="primary">Añadir cliente</button>
+    </header>
+
+    <div class="search-bar">
+      <mat-form-field appearance="outline">
+        <mat-label>Buscar</mat-label>
+        <input matInput>
+      </mat-form-field>
+    </div>
+
+    <div class="table-container">
+      <table mat-table [dataSource]="clientes" class="mat-elevation-z8">
+        <!-- Columnas -->
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef> Nombre </th>
+          <td mat-cell *matCellDef="let cliente"> {{cliente.nombre}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID Cliente </th>
+          <td mat-cell *matCellDef="let cliente"> {{cliente.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tasaInteres">
+          <th mat-header-cell *matHeaderCellDef> Tasa de Interés </th>
+          <td mat-cell *matCellDef="let cliente"> {{cliente.tasaInteres | percent}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaPago">
+          <th mat-header-cell *matHeaderCellDef> Fecha de pago (mes) </th>
+          <td mat-cell *matCellDef="let cliente"> {{cliente.fechaPago | date: 'MM/yyyy'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="credito">
+          <th mat-header-cell *matHeaderCellDef> Crédito </th>
+          <td mat-cell *matCellDef="let cliente"> {{cliente.credito | currency}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef> Acciones </th>
+          <td mat-cell *matCellDef="let cliente">
+            <button mat-icon-button>
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Cabeceras y filas -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </main>
+
+  <aside class="calendar-container">
+    <mat-calendar></mat-calendar>
+  </aside>
+</div>
