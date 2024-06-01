@@ -8,6 +8,8 @@ import {MatTableModule} from "@angular/material/table";
 import {MatIconModule} from "@angular/material/icon";
 import {MatCalendar, MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import { RouterLink, RouterModule } from '@angular/router';
+import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 
 interface Venta {
   cliente: string;
@@ -30,6 +32,11 @@ interface Venta {
     MatIconModule,
     MatCalendar,
     MatDatepickerModule,
+    RouterModule,
+    RouterLink,
+    MatSidenavContainer,
+    MatSidenav,
+    MatSidenavContent,
     MatNativeDateModule],
   templateUrl: './historial.component.html',
   styleUrl: './historial.component.css'
