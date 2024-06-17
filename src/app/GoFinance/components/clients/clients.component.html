@@ -3,9 +3,10 @@
     <nav>
       <ul>
         <li><a href="#">Inicio</a></li>
-        <li><a href="#">Historial</a></li>
-        <li><a href="#">Clientes</a></li>
+        <li><a href="#" routerLink="/history">Historial</a></li>
+        <li><a href="#" routerLink="/clients">Clientes</a></li>
         <li><a href="#">Configuración</a></li>
+        <li><a href="#" (click)="showDialogsidebar()">Cerrar Sesión</a></li>
       </ul>
     </nav>
   </aside>
@@ -13,7 +14,7 @@
   <main class="main-content">
     <header>
       <h1>Clientes</h1>
-      <button mat-raised-button color="primary">Añadir cliente</button>
+      <button mat-raised-button color="primary" [routerLink]="'/data-customer'">Añadir cliente</button>
     </header>
 
     <div class="search-bar">
@@ -70,4 +71,4 @@
   <aside class="calendar-container">
     <mat-calendar></mat-calendar>
   </aside>
-</div>
+

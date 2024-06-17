@@ -3,18 +3,19 @@
     <nav>
       <ul>
         <li><a href="#">Inicio</a></li>
-        <li><a href="#">Historial</a></li>
-        <li><a href="#">Clientes</a></li>
+        <li><a href="#" routerLink="/history">Historial</a></li>
+        <li><a href="#" routerLink="/clients">Clientes</a></li>
         <li><a href="#">Configuración</a></li>
+        <li><a href="#">Cerrar Sesión</a></li>
       </ul>
     </nav>
-    <button (click)="logOut()">Cerrar sesión</button>
+    <button (click)="logout()">Cerrar sesión</button>
   </aside>
 
   <main class="main-content">
     <header>
       <h1>Historial de ventas</h1>
-      <button mat-raised-button color="primary">Añadir Venta</button>
+      <button mat-raised-button color="primary" [routerLink]="'/bills'">Añadir Venta</button>
     </header>
 
     <div class="search-bar">

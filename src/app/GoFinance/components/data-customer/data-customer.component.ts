@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import {CurrencyPipe} from "@angular/common";
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatCalendar} from "@angular/material/datepicker";
+import { Component, OnInit} from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatCalendar } from '@angular/material/datepicker';
 import {
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
     MatHeaderCell,
     MatHeaderRow,
     MatHeaderRowDef,
@@ -19,7 +19,7 @@ import {MatTooltip} from "@angular/material/tooltip";
 import { MatCard } from '@angular/material/card';
 
 @Component({
-  selector: 'app-bills',
+  selector: 'app-data-customer',
   standalone: true,
   imports: [
     CurrencyPipe,
@@ -43,9 +43,9 @@ import { MatCard } from '@angular/material/card';
     MatCheckbox,
     MatTooltip
   ],
-  templateUrl: './bills.component.html',
-  styleUrl: './bills.component.css'
+  templateUrl: './data-customer.component.html',
+  styleUrl: './data-customer.component.css'
 })
-export class BillsComponent {
+export class DataCustomerComponent {
 
 }
