@@ -101,18 +101,15 @@ button[mat-icon-button] {
   padding: 0;
 }
 
-button[mat-icon-button] mat-icon {
-  width: 24px;
-  height: 24px;
-  line-height: 1.5;
-}
-
-button[mat-icon-button] {
-  padding: 6px;
-}
 
 .forgot-password {
   display: block;
   margin-top: 10px;
   color: #1e3a8a;
 }
+
+mat-icon {
+  height: 1.6vh;
+}
+
+

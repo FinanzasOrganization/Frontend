@@ -6,7 +6,7 @@ describe('DialogComponent', () => {
   let component: DialogComponent;
   let fixture: ComponentFixture<DialogComponent>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       declarations: [DialogComponent]
     });
@@ -19,4 +19,3 @@ describe('DialogComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-
