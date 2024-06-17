@@ -6,6 +6,7 @@ import {BillsComponent} from "./GoFinance/components/bills/bills.component";
 import {ClientsComponent} from "./GoFinance/components/clients/clients.component";
 import {AuthGuard} from "./core/guards/auth.guard";
 import {AuthenticatedGuard} from "./core/guards/authenticated.guard";
+import { DataCustomerComponent } from './GoFinance/components/data-customer/data-customer.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/register', pathMatch: 'full'},
@@ -13,5 +14,6 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [AuthenticatedGuard] },
   { path: 'history', component: HistorialComponent, canActivate: [AuthGuard] },
   { path: 'bills', component: BillsComponent, canActivate: [AuthGuard] },
-  { path: 'clients', component: ClientsComponent, canActivate: [AuthGuard] }
+  { path: 'clients', component: ClientsComponent, canActivate: [AuthGuard] },
+  { path: 'data-customer', component: DataCustomerComponent, canActivate: [AuthGuard] }
 ];
