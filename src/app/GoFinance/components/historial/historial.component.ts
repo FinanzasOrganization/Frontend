@@ -8,6 +8,7 @@ import {MatTableModule} from "@angular/material/table";
 import {MatIconModule} from "@angular/material/icon";
 import {MatCalendar, MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import {AuthService} from "../../../core/services/auth.service";
 
 interface Venta {
   cliente: string;
@@ -47,7 +48,13 @@ export class HistorialComponent implements OnInit {
     {cliente: 'Carter Culhane', limiteCredito: 750, vencimiento: '13/05/2024', metodoPago: 'Crédito', montoAcumulado: 250},
   ];
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit(): void {}
+
+  logOut(): void {
+    this.authService.logOut();
+  }
+
+
 }
