@@ -10,6 +10,10 @@ import {MatCalendar, MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import { RouterLink, RouterModule } from '@angular/router';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
+import { Router } from '@angular/router';
+import { ApiserviceService } from '../../../services/auth-services/apiservice.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 
 interface Venta {
   cliente: string;
@@ -54,7 +58,28 @@ export class HistorialComponent implements OnInit {
     {cliente: 'Carter Culhane', limiteCredito: 750, vencimiento: '13/05/2024', metodoPago: 'Crédito', montoAcumulado: 250},
   ];
 
-  constructor() {}
+  constructor(
+    private apiService: ApiserviceService,
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {}
+  logout(){
+    this.apiService.logout()
+    this.router.navigate(['/login']);
+  }
+
+  showDialogsidebar(): void {
+    this.dialog
+      .open(DialogComponent, {
+        data: "¿Deseas cerrar sesión?"
+      })
+      .afterClosed()
+      .subscribe((confirmado: Boolean) => {
+        if (confirmado) {
+          this.logout()
+        }
+      })
+  }
 }
