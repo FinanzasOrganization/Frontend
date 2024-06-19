@@ -62,28 +62,6 @@ header {
   text-align: left;
 }
 
-.input-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px;
-}
-
-.input-group label, .input-group input {
-  width: 100%;
-  display: block;
-}
-
-.input-group {
-  width: 45%;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
 
 
 
@@ -110,3 +88,4 @@ input {
   margin-bottom: 3rem;
   color: rgb(0, 0, 0);
 }
+

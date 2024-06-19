@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CommonModule, CurrencyPipe, DatePipe} from "@angular/common";
 import {MatButtonModule} from "@angular/material/button";
 import {MatCalendar, MatDatepickerModule} from "@angular/material/datepicker";
-import {MatTableModule} from "@angular/material/table";
+import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
@@ -14,6 +14,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 import { ApiserviceService } from '../../../services/auth-services/apiservice.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { CustomerService } from '../../services/customer.service';
 
 interface Cliente {
   nombre: string;
@@ -45,22 +46,14 @@ interface Cliente {
   styleUrl: './clients.component.css'
 })
 export class ClientsComponent implements OnInit {
-  displayedColumns: string[] = ['nombre', 'id', 'tasaInteres', 'fechaPago', 'credito', 'acciones'];
-  clientes: Cliente[] = [
-    {nombre: 'Kaylynn Bator', id: 1, tasaInteres: 0.05, fechaPago: new Date('2021-05-13'), credito: 1000},
-    {nombre: 'Carter Culhane', id: 2, tasaInteres: 0.05, fechaPago: new Date('2021-05-13'), credito: 750},
-    {nombre: 'Alena Press', id: 3, tasaInteres: 0.05, fechaPago: new Date('2021-05-13'), credito: 750},
-    {nombre: 'Ashlynn Curtis', id: 4, tasaInteres: 0.05, fechaPago: new Date('2021-05-13'), credito: 750},
-    {nombre: 'Desirae Bator', id: 5, tasaInteres: 0.05, fechaPago: new Date('2021-05-13'), credito: 750},
-    {nombre: 'Abram Stanton', id: 6, tasaInteres: 0.05, fechaPago: new Date('2021-05-13'), credito: 1000},
-    {nombre: 'Kaylynn Bator', id: 7, tasaInteres: 0.05, fechaPago: new Date('2021-05-13'), credito: 1000},
-    {nombre: 'Carter Culhane', id: 8, tasaInteres: 0.05, fechaPago: new Date('2021-05-13'), credito: 750},
-  ];
+  displayedColumns: string[] = ['name', 'id', 'interestRate', 'monthlyPaymentDate', 'creditLimit', "account-balance", "delete"];
+  dataSource = new MatTableDataSource();
 
   constructor(
     private apiService: ApiserviceService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private customerService: CustomerService
   ) {}
 
   logout(){
@@ -80,5 +73,25 @@ export class ClientsComponent implements OnInit {
         }
       })
   }
-  ngOnInit(): void {}
+  ngOnInit() {
+    this.getAllCustomers();
+  }
+
+  getAllCustomers() {
+    this.customerService.getAllCustomers().subscribe((response: any) => {
+      this.dataSource.data = response;
+      console.log(response);
+    });
+  }
+
+  deleteCustomer(id: string) {
+    this.customerService.deleteCustomer(id).subscribe(() => {
+      // Actualizar los datos de la tabla después de eliminar un cliente
+      this.getAllCustomers();
+    });
+  }
+
+  getAccountBalance(customerId: number) {
+    this.router.navigate(['/account-balance', customerId]);
+  }
 }

@@ -20,44 +20,76 @@
     <br>
 
     <mat-card>
-    <div class="bill-box">
-      <form>
-        <div class="form-group">
-          <div class="input-row">
-            <div class="input-group">
-              <label>Factura</label>
-              <input id="bill" type="bill" name="bill" matInput required>
-            </div>
-            <div class="input-group">
-              <label>Tipo de moneda</label>
-              <input id="moneyType" type="moneyType" name="moneyType" matInput required>
-            </div>
-          </div>
+      <div class="bill-box">
+        <form [formGroup]="billForm" (ngSubmit)="onSubmit()">
+
           <div class="form-group">
-            <div class="input-row">
-            <div class="input-group">
-              <label>Usuario</label>
-              <input id="user" type="user" name="user" matInput required>
-            </div>
-            </div>
+            <mat-form-field>
+              <mat-label>Cliente</mat-label>
+              <mat-select formControlName="customerId">
+                <mat-option *ngFor="let customer of customers" [value]="customer.id">
+                  {{customer.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
-          <div class="input-row">
-            <div class="input-group">
-              <label>Tasa de interés</label>
-              <input id="interestRate" type="interestRate" name="interestRate" matInput required>
-            </div>
-            <div class="input-group">
-              <label>Tipo de crédito</label>
-              <input id="creditType" type="creditType" name="creditType" matInput required>
-            </div>
+
+          <div class="form-group">
+            <mat-form-field>
+              <mat-label>Monto</mat-label>
+              <input matInput id="amount" type="amount" name="amount" required formControlName="amount">
+            </mat-form-field>
           </div>
-        </div>
-        <div class="button-row">
-          <button mat-button>Registrar venta</button>
-          <button mat-button>Cancelar venta</button>
-        </div>
-      </form>
-    </div>
+      
+          <div class="form-group">
+            <mat-form-field>
+              <mat-label>Tasa de interés</mat-label>
+              <input matInput id="interestRate" type="interestRate" name="interestRate" required formControlName="interestRate">
+            </mat-form-field>
+          </div>
+      
+          <div class="form-group">
+            <mat-form-field>
+              <mat-label>Cuotas</mat-label>
+              <input matInput id="installments" type="installments" name="installments" required formControlName="installments">
+            </mat-form-field>
+          </div>
+      
+          <div class="form-group">
+            <mat-form-field>
+              <mat-label>Descripción</mat-label>
+              <input matInput id="description" type="description" name="description" required formControlName="description">
+            </mat-form-field>
+          </div>
+      
+          <div class="form-group">
+            <mat-form-field>
+              <mat-label>Tipo de crédito</mat-label>
+              <mat-select formControlName="creditType">
+                @for (credit of creditTypes; track credit) {
+                  <mat-option [value]="credit.value">{{credit.viewValue}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+      
+          <div class="form-group">
+            <mat-form-field>
+              <mat-label>Tipo de interés</mat-label>
+              <mat-select formControlName="interestType">
+                @for (interest of interestType; track interest) {
+                  <mat-option [value]="interest.value">{{interest.viewValue}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+      
+          <div class="form-group">
+            <button type="submit" mat-button>Registrar venta</button>
+            <button mat-button>Cancelar venta</button>
+          </div>
+        </form>
+      </div>
     </mat-card>
   </main>
 

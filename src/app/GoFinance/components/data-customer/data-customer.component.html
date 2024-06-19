@@ -21,54 +21,73 @@
 
     <mat-card>
     <div class="bill-box">
-      <form>
+      <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-          <div class="input-row">
-            <div class="input-group">
-              <label>Nombres</label>
-              <input id="bill" type="bill" name="bill" matInput required>
-            </div>
-            <div class="input-group">
-              <label>Apellidos</label>
-              <input id="moneyType" type="moneyType" name="moneyType" matInput required>
-            </div>
+          <div class="form-row">
+            <mat-form-field>
+              <mat-label>Nombre</mat-label>
+              <input matInput id="name" type="name" name="name" required formControlName="name">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Dirección</mat-label>
+              <input matInput id="address" type="address" name="address" required formControlName="address">
+            </mat-form-field>
           </div>
-          <div class="form-group">
-            <div class="input-row">
-            <div class="input-group">
-              <label>Dirección Referencial</label>
-              <input id="user" type="user" name="user" matInput required>
-            </div>
-            </div>
+          
+          
+        </div>
+
+        <div class="form-group">
+          <div class="form-row">
+            <mat-form-field>
+              <mat-label>Teléfono</mat-label>
+              <input matInput id="phone" type="phone" name="phone" required formControlName="phone">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Email</mat-label>
+              <input matInput id="email" type="email" name="email" required formControlName="email">
+            </mat-form-field>
           </div>
-          <div class="input-row">
-            <div class="input-group">
-              <label>DNI</label>
-              <input id="interestRate" type="interestRate" name="interestRate" matInput required>
-            </div>
-            <div class="input-group">
-              <label>Tasa de interés</label>
-              <input id="creditType" type="creditType" name="creditType" matInput required>
-            </div>
+          
+        </div>
+
+        <div class="form-group">
+          <div class="form-row">
+            <mat-form-field>
+              <mat-label>Límite de crédito</mat-label>
+              <input matInput id="creditLimit" type="creditLimit" name="creditLimit" required formControlName="creditLimit">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Choose a date</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="monthlyPaymentDate">
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
           </div>
-          <div class="input-row">
-            <div class="input-group">
-              <label>Límite de crédito</label>
-              <input id="interestRate" type="interestRate" name="interestRate" matInput required>
-            </div>
-            <div class="input-group">
-              <label>Fecha de Pago</label>
-              <input id="creditType" type="creditType" name="creditType" matInput required>
-            </div>
+          
+        </div>
+
+        <div class="form-group">
+          <div class="form-row">
+            <mat-form-field>
+              <mat-label>Tasa de interés</mat-label>
+              <input matInput id="interestRate" type="interestRate" name="interestRate" required formControlName="interestRate">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Tasa moratoria</mat-label>
+              <input matInput id="penaltyInterestRate" type="penaltyInterestRate" name="penaltyInterestRate" required formControlName="penaltyInterestRate">
+            </mat-form-field>
           </div>
         </div>
+
         <div class="button-row">
-          <button mat-button>Registrar Cliente</button>
+          <button type="submit" mat-button>Registrar Cliente</button>
           <button mat-button>Cancelar Registro</button>
         </div>
       </form>
     </div>
     </mat-card>
+    
   </main>
 
 

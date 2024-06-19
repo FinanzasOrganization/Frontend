@@ -7,7 +7,7 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {Router, RouterLink} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule} from '@angular/forms';
-import {AuthService} from "../../../core/services/auth.service";
+import {AuthService} from "../../../../core/services/auth.service";
 
 @Component({
   selector: 'app-register',

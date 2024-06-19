@@ -24,6 +24,8 @@ export class AuthService {
           console.log(response.access_token)
           this.setToken(response.access_token);
         }
+        const userId = Number(response.user_id);
+        localStorage.setItem('user_id', userId.toString()); // Guardar user_id en el almacenamiento local
       })
     );
   }

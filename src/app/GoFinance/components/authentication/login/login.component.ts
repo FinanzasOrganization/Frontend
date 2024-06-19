@@ -5,7 +5,7 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatInput} from "@angular/material/input";
 import {MatTooltip} from "@angular/material/tooltip";
 import {Router, RouterLink} from "@angular/router";
-import {AuthService} from "../../../core/services/auth.service";
+import {AuthService} from "../../../../core/services/auth.service";
 import {FormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 
@@ -40,5 +40,6 @@ export class LoginComponent {
       error: (err) => console.error('Login failed', err)
     })
   }
+
 
 }

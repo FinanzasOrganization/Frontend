@@ -16,7 +16,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   text-align: center;
-  width: 300px;
+  width: 60vh;
 }
 
 .sidebar {
@@ -62,34 +62,6 @@ header {
   text-align: left;
 }
 
-.input-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px;
-}
-
-.input-group label, .input-group input {
-  width: 100%;
-  display: block;
-}
-
-.input-group {
-  width: 45%;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-
-
-
-
-
 .button-row {
   margin-top: 10vh;
 }
@@ -109,4 +81,9 @@ input {
 .header-style {
   margin-bottom: 3rem;
   color: rgb(0, 0, 0);
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
 }

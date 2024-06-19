@@ -26,42 +26,33 @@
     </div>
 
     <div class="table-container">
-      <table mat-table [dataSource]="ventas" class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <!-- Columnas -->
-        <ng-container matColumnDef="cliente">
+        <ng-container matColumnDef="customerName">
           <th mat-header-cell *matHeaderCellDef> Cliente </th>
-          <td mat-cell *matCellDef="let venta"> {{venta.cliente}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.customerName}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="limiteCredito">
+        <ng-container matColumnDef="creditLimit">
           <th mat-header-cell *matHeaderCellDef> Límite de crédito disponible </th>
-          <td mat-cell *matCellDef="let venta"> {{venta.limiteCredito | currency}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.creditLimit}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="vencimiento">
+        <ng-container matColumnDef="dueDate">
           <th mat-header-cell *matHeaderCellDef> Vencimiento </th>
-          <td mat-cell *matCellDef="let venta"> {{venta.vencimiento}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.dueDate | date}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="metodoPago">
+        <ng-container matColumnDef="creditType">
           <th mat-header-cell *matHeaderCellDef> Método de pago </th>
-          <td mat-cell *matCellDef="let venta">
-            <span [ngClass]="venta.metodoPago">{{venta.metodoPago}}</span>
+          <td mat-cell *matCellDef="let element"> 
+            {{element.creditType === 'SINGLE_PAYMENT' ? 'Contado' : 'Cuotas'}} 
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="montoAcumulado">
-          <th mat-header-cell *matHeaderCellDef> Monto Acumulado </th>
-          <td mat-cell *matCellDef="let venta"> {{venta.montoAcumulado | currency}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="acciones">
-          <th mat-header-cell *matHeaderCellDef> Acciones </th>
-          <td mat-cell *matCellDef="let venta">
-            <button mat-icon-button>
-              <mat-icon>more_vert</mat-icon>
-            </button>
-          </td>
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef> Monto </th>
+          <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
         </ng-container>
 
         <!-- Cabeceras y filas -->
