@@ -11,7 +11,6 @@ import {MatNativeDateModule} from "@angular/material/core";
 import { RouterLink, RouterModule } from '@angular/router';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { DialogComponent } from '../dialog/dialog.component';
-import { ApiserviceService } from '../../../services/auth-services/apiservice.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerService } from '../../services/customer.service';
@@ -50,31 +49,17 @@ export class ClientsComponent implements OnInit {
   dataSource = new MatTableDataSource();
 
   constructor(
-    private apiService: ApiserviceService,
     private router: Router,
     public dialog: MatDialog,
     private customerService: CustomerService
   ) {}
 
-  logout(){
-    this.apiService.logout()
-    this.router.navigate(['/login']);
-  }
-
-  showDialogsidebar(): void {
-    this.dialog
-      .open(DialogComponent, {
-        data: "¿Deseas cerrar sesión?"
-      })
-      .afterClosed()
-      .subscribe((confirmado: Boolean) => {
-        if (confirmado) {
-          this.logout()
-        }
-      })
-  }
   ngOnInit() {
     this.getAllCustomers();
+  }
+
+  cerrar() {
+    sessionStorage.clear();
   }
 
   getAllCustomers() {

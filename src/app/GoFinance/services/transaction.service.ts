@@ -20,7 +20,8 @@ export class TransactionService {
   }
 
   getAllTransactions(): Observable<any> {
-    return this.httpClient.get<any>(this.TRANSACTION_URL);
+    const clientId = localStorage.getItem('user_id');
+    return this.httpClient.get<any>(`${this.TRANSACTION_URL}/client/${clientId}`);
   }
 
   updateTransaction(transactionId: number, status: string): Observable<any> {

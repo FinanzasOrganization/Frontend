@@ -14,11 +14,7 @@
     <header>
       <h1>Registrar factura</h1>
     </header>
-
-    <br>
-    <br>
-    <br>
-
+    
     <mat-card>
       <div class="bill-box">
         <form [formGroup]="billForm" (ngSubmit)="onSubmit()">
@@ -31,6 +27,9 @@
                   {{customer.name}}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="billForm.get('customerId')?.errors?.['required']">
+                Seleccione un cliente
+              </mat-error>
             </mat-form-field>
           </div>
 
@@ -38,6 +37,12 @@
             <mat-form-field>
               <mat-label>Monto</mat-label>
               <input matInput id="amount" type="amount" name="amount" required formControlName="amount">
+              <mat-error *ngIf="billForm.get('amount')?.errors?.['required']">
+                Ingrese un monto
+              </mat-error>
+              <mat-error *ngIf="billForm.get('amount')?.errors?.['min']">
+                El monto deber ser mínimo de S/ 1.00
+              </mat-error>
             </mat-form-field>
           </div>
       
@@ -45,13 +50,12 @@
             <mat-form-field>
               <mat-label>Tasa de interés</mat-label>
               <input matInput id="interestRate" type="interestRate" name="interestRate" required formControlName="interestRate">
-            </mat-form-field>
-          </div>
-      
-          <div class="form-group">
-            <mat-form-field>
-              <mat-label>Cuotas</mat-label>
-              <input matInput id="installments" type="installments" name="installments" required formControlName="installments">
+              <mat-error *ngIf="billForm.get('interestRate')?.errors?.['required']">
+                Ingrese una tasa de interés
+              </mat-error>
+              <mat-error *ngIf="billForm.get('interestRate')?.errors?.['min']">
+                El valor de la tasa debe ser mínimo 1%
+              </mat-error>
             </mat-form-field>
           </div>
       
@@ -59,6 +63,9 @@
             <mat-form-field>
               <mat-label>Descripción</mat-label>
               <input matInput id="description" type="description" name="description" required formControlName="description">
+              <mat-error *ngIf="billForm.get('description')?.errors?.['required']">
+                Coloque una descripción de la venta
+              </mat-error>
             </mat-form-field>
           </div>
       
@@ -70,6 +77,22 @@
                   <mat-option [value]="credit.value">{{credit.viewValue}}</mat-option>
                 }
               </mat-select>
+              <mat-error *ngIf="billForm.get('creditType')?.errors?.['required']">
+                Seleccione un tipo de crédito
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-group" *ngIf="billForm?.get('creditType')?.value === 'MULTI_PAYMENT'">
+            <mat-form-field>
+              <mat-label>Cuotas</mat-label>
+              <input matInput id="installments" type="installments" name="installments" required formControlName="installments">
+              <mat-error *ngIf="billForm.get('installments')?.errors?.['min']">
+                El número de cuotas debe ser al menos 2.
+              </mat-error>
+              <mat-error *ngIf="billForm.get('installments')?.errors?.['required']">
+                Coloque la cantidad de cuotas deseadas
+              </mat-error>
             </mat-form-field>
           </div>
       
@@ -81,6 +104,9 @@
                   <mat-option [value]="interest.value">{{interest.viewValue}}</mat-option>
                 }
               </mat-select>
+              <mat-error *ngIf="billForm.get('interestType')?.errors?.['required']">
+                Seleccione un tipo de interés
+              </mat-error>
             </mat-form-field>
           </div>
       

@@ -31,7 +31,8 @@ export class CustomerService {
   }
   
   getAllCustomers(): Observable<any> {
-    return this.httpClient.get<any>(this.CUSTOMER_URL);
+    const userId = localStorage.getItem('user_id');
+    return this.httpClient.get<any>(`${this.CUSTOMER_URL}/client/${userId}`);
   }
 
   deleteCustomer(customerId: string): Observable<any> {

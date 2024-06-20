@@ -11,7 +11,6 @@ import {MatNativeDateModule} from "@angular/material/core";
 import { RouterLink, RouterModule } from '@angular/router';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
-import { ApiserviceService } from '../../../services/auth-services/apiservice.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
 import { AuthService } from '../../../core/services/auth.service';
@@ -59,35 +58,21 @@ export class HistorialComponent implements OnInit {
   dataSource = new MatTableDataSource<any>(this.transactions);
 
   constructor(
-    private apiService: ApiserviceService,
     private router: Router,
     public dialog: MatDialog,
     private customerService: CustomerService,
     private transactionService: TransactionService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.getAllTransactions();
   }
-  logout(){
-    this.apiService.logout()
-    this.router.navigate(['/login']);
-  }
 
-  showDialogsidebar(): void {
-    this.dialog
-      .open(DialogComponent, {
-        data: "¿Deseas cerrar sesión?"
-      })
-      .afterClosed()
-      .subscribe((confirmado: Boolean) => {
-        if (confirmado) {
-          this.logout()
-        }
-      })
+  cerrar() {
+    this.authService.logOut();
   }
-
 
 
   getAllTransactions(): void {

@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiserviceService } from '../../../../services/auth-services/apiservice.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogComponent } from '../../dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,6 +10,7 @@ import { CustomerService } from '../../../services/customer.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-account-balance',
@@ -22,52 +22,41 @@ import { MatButtonModule } from '@angular/material/button';
 export class AccountBalanceComponent implements OnInit {
   customerTransactions: any[] = []
   paidTransactions: any[] = []
-  totalBalance: any;
+  remainingCredit: any;
+  creditUsed: any;
   creditLimit: any;
   dueDate: any;
   totalInterest: any;
   selection = new SelectionModel<any>(true, []);
   dataSource = new MatTableDataSource<any>(this.customerTransactions);
   displayedColumns: string[] = ['id', 'transactionDate', 'description', 'amount', 'interestAmount', 'status', 'select']
-  totalDisplayedColumns: string[] = ['totalBalance', 'creditLimit', 'dueDate', 'totalInterest']
+  totalDisplayedColumns: string[] = ['remainingCredit', 'creditLimit', 'dueDate', 'totalInterest']
   paidTransactionDisplayedColumns: string[] = ['id', 'transactionDate', 'description', 'amount']
   totalDataSource = new MatTableDataSource<any>(this.customerTransactions);
   paidTransactionDataSource = new MatTableDataSource<any>(this.paidTransactions);
 
-  constructor(private apiService: ApiserviceService, 
+  constructor(
     private router: Router, 
     private dialog: MatDialog, 
     private transactionService: TransactionService, 
     private route: ActivatedRoute,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
     const customerId = Number(this.route.snapshot.paramMap.get('id'));
-    this.getTransactionsByCustomer(customerId);
+    this.getPendingTransactionsByCustomer(customerId);
     this.getTransactionsByCustomerDetail(customerId);
     this.creditLimit = this.getCustomerCreditLimit(customerId)
     this.dueDate = this.getCustomerDueDate(customerId);
     this.getPaidTransactions(customerId);
   }
 
-  logout(){
-    this.apiService.logout()
-    this.router.navigate(['/login']);
+  cerrar() {
+    this.authService.logOut();
   }
 
-  showDialogsidebar(): void {
-    this.dialog
-      .open(DialogComponent, {
-        data: "¿Deseas cerrar sesión?"
-      })
-      .afterClosed()
-      .subscribe((confirmado: Boolean) => {
-        if (confirmado) {
-          this.logout()
-        }
-      })
-  }
 
   getCustomerCreditLimit(customerId: number) {
     this.customerService.getCustomerById(customerId).subscribe(customer => {
@@ -83,28 +72,38 @@ export class AccountBalanceComponent implements OnInit {
     });
   }
 
-  getTransactionsByCustomer(customerId: number) {
+  getPendingTransactionsByCustomer(customerId: number) {
     this.transactionService.getTransactions(customerId).subscribe(transactions => {
-      this.customerTransactions = transactions.transactions;
+      this.customerTransactions = transactions.transactions.filter((transaction: any) => transaction.status === 'PENDING');
       this.dataSource.data = this.customerTransactions;
+      
     });
   }
 
   getTransactionsByCustomerDetail(customerId: number) {
     this.transactionService.getTransactions(customerId).subscribe(detail => {
-      this.totalBalance = detail.totalBalance;
+      this.creditUsed = detail.creditUsed;
       this.totalInterest = detail.totalInterest;
       this.updateTotalDataSource();
     });
   }
 
   updateTotalDataSource() {
-    this.totalDataSource.data = [{
-      totalBalance: this.totalBalance,
-      creditLimit: this.creditLimit,
-      dueDate: this.dueDate,
-      totalInterest: this.totalInterest
-    }];
+  if (this.creditUsed !== undefined && this.creditLimit !== undefined) {
+    this.remainingCredit = this.creditLimit - this.creditUsed;
+  }
+  else {
+    this.remainingCredit = this.creditLimit;
+  }
+
+
+  this.totalDataSource.data = [{
+    creditUsed: this.creditUsed,
+    creditLimit: this.creditLimit,
+    dueDate: this.dueDate,
+    totalInterest: this.totalInterest,
+    remainingCredit: this.remainingCredit
+  }];
   }
 
   paySelectedTransactions() {
@@ -137,6 +136,8 @@ export class AccountBalanceComponent implements OnInit {
       }
     });
   }
+
+  @Output() totalSpendEmitter = new EventEmitter<any>();
 
 
 }

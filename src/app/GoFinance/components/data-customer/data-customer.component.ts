@@ -61,9 +61,9 @@ export class DataCustomerComponent implements OnInit {
 
   ngOnInit() {
     this.customerForm = new FormGroup({
-      'name': new FormControl(null, [Validators.required, Validators.min(1)]),
+      'name': new FormControl(null, [Validators.required, Validators.minLength(1)]),
       'address': new FormControl(null, [Validators.required, Validators.min(1)]),
-      'phone': new FormControl(null, [Validators.required, Validators.minLength(1), Validators.maxLength(9)]),
+      'phone': new FormControl(null, [Validators.required, Validators.minLength(7), Validators.maxLength(9)]),
       'email': new FormControl(null, [Validators.required, Validators.min(1)]),
       'creditLimit': new FormControl(null, [Validators.required, Validators.min(100), Validators.max(5000)]),
       'monthlyPaymentDate': new FormControl(null, [Validators.required, this.futureDateValidator]),
