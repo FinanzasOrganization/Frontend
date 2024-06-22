@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {CommonModule, CurrencyPipe} from "@angular/common";
+import {CommonModule, CurrencyPipe, NgIf} from "@angular/common";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatCalendar} from "@angular/material/datepicker";
 import {
@@ -23,6 +23,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatOption } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { CustomerService } from '../../services/customer.service';
+import { catchError, of } from 'rxjs';
 
 interface Credit {
   value: string;
@@ -30,6 +31,16 @@ interface Credit {
 }
 
 interface Interest {
+  value: string;
+  viewValue: string;
+}
+
+interface Tasa {
+  value: string;
+  viewValue: string;
+}
+
+interface Capitalizacion {
   value: string;
   viewValue: string;
 }
@@ -62,7 +73,8 @@ interface Interest {
     MatOption,
     MatFormFieldModule,
     MatSelectModule,
-    CommonModule
+    CommonModule,
+    NgIf
   ],
   templateUrl: './bills.component.html',
   styleUrl: './bills.component.css'
@@ -72,6 +84,7 @@ interface Interest {
 export class BillsComponent implements OnInit {
   billForm!: FormGroup;
   customers: any[] = [];
+  showAmountPrefix: boolean = false;
 
   creditTypes: Credit[] = [
     {value: 'SINGLE_PAYMENT', viewValue: 'Pago único'},
@@ -83,6 +96,20 @@ export class BillsComponent implements OnInit {
     {value: 'EFECTIVA', viewValue: 'Efectiva'}
   ]
 
+  tasaType: Tasa[] = [
+    {value: 'MENSUAL', viewValue: 'Mensual'},
+    {value: 'BIMESTRAL', viewValue: 'Bimestral'},
+    {value: 'TRIMESTRAL', viewValue: 'Trimestral'},
+    {value: 'SEMESTRAL', viewValue: 'Semestral'},
+    {value: 'ANUAL', viewValue: 'Anual'}
+  ]
+
+  capitalizacion: Capitalizacion[] = [
+    {value: 'DIARIA', viewValue: 'Diaria'},
+    {value: 'QUINCENAL', viewValue: 'Quincenal'},
+    {value: 'MENSUAL', viewValue: 'Mensual'}
+  ]
+
 
   ngOnInit() {
   
@@ -92,6 +119,8 @@ export class BillsComponent implements OnInit {
       'creditType': new FormControl(null, [Validators.required, this.creditTypeValidator]),
       'interestRate': new FormControl(null, [Validators.required, Validators.min(1)]),
       'interestType': new FormControl(null, [Validators.required, this.interestTypeValidator]),
+      'tasaType': new FormControl(null, [Validators.required, this.tasaTypeValidator]),
+      'capitalizacion': new FormControl(null, [Validators.required, this.capitalizacionValidator]),
       'installments': new FormControl(null),
       'description': new FormControl(null, Validators.required)
     });
@@ -102,6 +131,10 @@ export class BillsComponent implements OnInit {
   }
 
   constructor(private transactionService: TransactionService, private customerService: CustomerService, private snackBar: MatSnackBar) {}
+
+  toggleAmountPrefix() {
+    this.showAmountPrefix = true;
+  }
 
   creditTypeValidator(control: AbstractControl): { [key: string]: boolean } | null {
     const allowedValues = ['SINGLE_PAYMENT', 'MULTI_PAYMENT'];
@@ -115,6 +148,22 @@ export class BillsComponent implements OnInit {
     const allowedValues = ['NOMINAL', 'EFECTIVA'];
     if (control.value && !allowedValues.includes(control.value)) {
       return { 'invalidInterestType': true };
+    }
+    return null;
+  }
+
+  tasaTypeValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const allowedValues = ['MENSUAL', 'BIMESTRAL', 'TRIMESTRAL', 'SEMESTRAL', 'ANUAL'];
+    if (control.value && !allowedValues.includes(control.value)) {
+      return { 'invalidTasaType': true };
+    }
+    return null;
+  }
+
+  capitalizacionValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    const allowedValues = ['DIARIA', 'QUINCENAL', 'MENSUAL'];
+    if (control.value && !allowedValues.includes(control.value)) {
+      return { 'invalidCapitalizacion': true };
     }
     return null;
   }
@@ -148,21 +197,30 @@ export class BillsComponent implements OnInit {
 
   onSubmit() {
     if (this.billForm.valid) {
-      const { customerId, amount, creditType, interestRate, installments, interestType, description } = this.billForm.value;
-  
+      const { customerId, amount, description, creditType, interestRate, installments, interestType, tasaType} = this.billForm.value;
+      let capitalizacion = this.billForm.value.capitalizacion;
+      
+      if (interestType === 'EFECTIVA') {
+        capitalizacion = 'DIARIA';
+      }
+
       // Obtén el cliente y sus transacciones
       this.customerService.getCustomerById(customerId).subscribe(customer => {
-        this.transactionService.getTransactions(customerId).subscribe(transactions => {
-          // Usa el crédito usado devuelto por getTransactions
-          const creditUsed = transactions.creditUsed;
-  
+        this.transactionService.getTransactions(customerId).pipe(
+          catchError(error => {
+            // Asumir que el error significa que no hay transacciones y continuar
+            console.log('No se encontraron transacciones o hubo un error al recuperarlas', error);
+            return of({ creditUsed: 0 }); // Retorna un observable con creditUsed como 0
+          })
+        ).subscribe(transactions => {
+          const creditUsed = transactions.creditUsed || 0;
           const remainingCredit = customer.creditLimit - creditUsed;
   
           if (amount > remainingCredit) {
             console.error('Error posting transaction: This transaction exceeds the user\'s available credit');
             this.snackBar.open('Esta transacción excede el crédito disponible del usuario.', 'Cerrar', { duration: 3000 });
           } else {
-            this.transactionService.postTransaction(customerId, amount, description, creditType, interestRate, installments, interestType)
+            this.transactionService.postTransaction(customerId, amount, description, creditType, "PURCHASE", interestRate, installments, interestType, tasaType, capitalizacion)
               .subscribe(
                 response => {
                   console.log('Transaction posted successfully', response);

@@ -19,7 +19,7 @@
 .title {
   color: white;
   position: absolute;
-  top: 15%;
+  top: 10%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
@@ -35,7 +35,7 @@
 
 .register-link {
   margin-top: -2vh;
-  margin-bottom: 5vh;
+  margin-bottom: 2vh;
 }
 
 .register-link a {
@@ -43,8 +43,15 @@
 }
 
 .form-group {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 20px;
   text-align: left;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
 }
 
 .input-row {
@@ -70,15 +77,12 @@ label {
 }
 
 mat-icon {
-  font-size: 16px;
+  font-size: 22px;
 }
 
-input[matInput] {
+.register-input {
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  height: 7vh;
 }
 
 .remember-me {
@@ -108,8 +112,15 @@ button[mat-icon-button] {
   color: #1e3a8a;
 }
 
-mat-icon {
-  height: 1.6vh;
+.help-icon {
+  margin-bottom: 5px;
 }
+
+.submit-button {
+  background-color: Cyan;
+  border: 100%;
+}
+
+
 
 

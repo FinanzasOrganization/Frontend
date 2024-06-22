@@ -111,5 +111,25 @@
   .button-container .button2 {
     width: 200px;
   }
+
+  .paymentPlanButton {
+    width: 500px;
+    padding: 5px;
+  }
+
+  .custom-dialog-container {
+    max-width: 1000px !important; /* Forzar el ancho máximo */
+    width: 1000px !important; /* Forzar el ancho */
+  }
+
+  .payment-plan-title {
+    justify-content: space-between;
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  .payment-plan-table {
+    margin-bottom: 10px;
+  }
   
   

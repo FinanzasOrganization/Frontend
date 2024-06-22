@@ -31,12 +31,13 @@
                 Seleccione un cliente
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Seleccione un cliente de la lista" style="cursor: help;">help_outline</mat-icon>
           </div>
 
           <div class="form-group">
             <mat-form-field>
               <mat-label>Monto</mat-label>
-              <input matInput id="amount" type="amount" name="amount" required formControlName="amount">
+              <input matInput id="amount" type="number" name="amount" placeholder="0" required formControlName="amount">
               <mat-error *ngIf="billForm.get('amount')?.errors?.['required']">
                 Ingrese un monto
               </mat-error>
@@ -44,6 +45,7 @@
                 El monto deber ser mínimo de S/ 1.00
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingresa el monto de la transacción (soles)" style="cursor: help;">help_outline</mat-icon>
           </div>
       
           <div class="form-group">
@@ -57,6 +59,7 @@
                 El valor de la tasa debe ser mínimo 1%
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingrese el porcentaje de tasa de interés" style="cursor: help;">help_outline</mat-icon>
           </div>
       
           <div class="form-group">
@@ -67,6 +70,7 @@
                 Coloque una descripción de la venta
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingresa la descripción de la transacción" style="cursor: help;">help_outline</mat-icon>
           </div>
       
           <div class="form-group">
@@ -81,6 +85,7 @@
                 Seleccione un tipo de crédito
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Seleccione el tipo de crédito (pago único o en cuotas)" style="cursor: help;">help_outline</mat-icon>
           </div>
 
           <div class="form-group" *ngIf="billForm?.get('creditType')?.value === 'MULTI_PAYMENT'">
@@ -94,6 +99,7 @@
                 Coloque la cantidad de cuotas deseadas
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingrese las cuotas del pago" style="cursor: help;">help_outline</mat-icon>
           </div>
       
           <div class="form-group">
@@ -108,8 +114,39 @@
                 Seleccione un tipo de interés
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Seleccione el tipo de tasa de interés (Nominal o Efectiva)" style="cursor: help;">help_outline</mat-icon>
           </div>
-      
+
+          <div class="form-group">
+            <mat-form-field>
+              <mat-label>Periodo</mat-label>
+              <mat-select formControlName="tasaType">
+                @for (type of tasaType; track type) {
+                  <mat-option [value]="type.value">{{type.viewValue}}</mat-option>
+                }
+              </mat-select>
+              <mat-error *ngIf="billForm.get('tasaType')?.errors?.['required']">
+                Seleccione un periodo de tasa
+              </mat-error>
+            </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Seleccione el periodo de la tasa de interés" style="cursor: help;">help_outline</mat-icon>
+          </div>
+
+          <div class="form-group" *ngIf="billForm?.get('interestType')?.value === 'NOMINAL'">
+            <mat-form-field>
+              <mat-label>Capitalización</mat-label>
+              <mat-select formControlName="capitalizacion">
+                @for (capitalizacion of capitalizacion; track capitalizacion) {
+                  <mat-option [value]="capitalizacion.value">{{capitalizacion.viewValue}}</mat-option>
+                }
+              </mat-select>
+              <mat-error *ngIf="billForm.get('capitalizacion')?.errors?.['required']">
+                Seleccione un periodo de capitalización
+              </mat-error>
+            </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Seleccione el periodo de capitalización" style="cursor: help;">help_outline</mat-icon>
+          </div>
+
           <div class="form-group">
             <button type="submit" mat-button>Registrar venta</button>
             <button mat-button>Cancelar venta</button>

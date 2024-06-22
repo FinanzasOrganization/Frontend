@@ -33,6 +33,7 @@
                 Ingrese un nombre
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingrese el nombre del cliente" style="cursor: help;">help_outline</mat-icon>
             <mat-form-field>
               <mat-label>Dirección</mat-label>
               <input matInput id="address" type="address" name="address" required formControlName="address">
@@ -40,6 +41,7 @@
                 Ingrese una dirección
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingrese la dirección del cliente" style="cursor: help;">help_outline</mat-icon>
           </div>
           
           
@@ -57,6 +59,7 @@
                 Ingrese un teléfono válido
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingrese un número de teléfono válido del cliente" style="cursor: help;">help_outline</mat-icon>
             <mat-form-field>
               <mat-label>Email</mat-label>
               <input matInput id="email" type="email" name="email" required formControlName="email">
@@ -64,6 +67,7 @@
                 Ingrese una dirección email
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingrese una dirección de email válida del cliente" style="cursor: help;">help_outline</mat-icon>
           </div>
           
         </div>
@@ -80,8 +84,9 @@
                 Ingrese un límite de crédito válido (mínimo S/ 100.00)
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingrese el límite de crédito para el cliente" style="cursor: help;">help_outline</mat-icon>
             <mat-form-field>
-              <mat-label>Choose a date</mat-label>
+              <mat-label>Fecha de pago mensual</mat-label>
               <input matInput [matDatepicker]="picker" formControlName="monthlyPaymentDate">
               <mat-error *ngIf="customerForm.get('monthlyPaymentDate')?.errors?.['required']">
                 Ingrese una fecha de pago mensual
@@ -92,6 +97,7 @@
               <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingrese la fecha de pago mensual del cliente" style="cursor: help;">help_outline</mat-icon>
           </div>
           
         </div>
@@ -108,6 +114,7 @@
                 Ingrese una tasa de interés válida (mínimo 1%)
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingrese la tasa de interés para el cliente" style="cursor: help;">help_outline</mat-icon>
             <mat-form-field>
               <mat-label>Tasa moratoria</mat-label>
               <input matInput id="penaltyInterestRate" type="penaltyInterestRate" name="penaltyInterestRate" required formControlName="penaltyInterestRate">
@@ -118,6 +125,7 @@
                 Ingrese una tasa moratoria válida (mínimo 1%)
               </mat-error>
             </mat-form-field>
+            <mat-icon class="help-icon" matTooltip="Ingrese la tasa moratoria para el cliente" style="cursor: help;">help_outline</mat-icon>
           </div>
         </div>
 

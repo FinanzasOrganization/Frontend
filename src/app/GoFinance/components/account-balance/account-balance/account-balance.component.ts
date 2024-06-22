@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DialogComponent } from '../../dialog/dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { TransactionService } from '../../../services/transaction.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatCalendar, MatDatepickerModule } from '@angular/material/datepicker';
@@ -11,11 +11,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../../../core/services/auth.service';
+import { PaymentPlanDialogComponent } from '../../payment-plan-dialog/payment-plan-dialog.component';
 
 @Component({
   selector: 'app-account-balance',
   standalone: true,
-  imports: [MatTableModule, MatCalendar, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatButtonModule],
+  imports: [MatTableModule, MatCalendar, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatButtonModule, MatDialogModule, PaymentPlanDialogComponent],
   templateUrl: './account-balance.component.html',
   styleUrl: './account-balance.component.css'
 })
@@ -27,11 +28,13 @@ export class AccountBalanceComponent implements OnInit {
   creditLimit: any;
   dueDate: any;
   totalInterest: any;
+  totalDebt: any;
   selection = new SelectionModel<any>(true, []);
   dataSource = new MatTableDataSource<any>(this.customerTransactions);
   displayedColumns: string[] = ['id', 'transactionDate', 'description', 'amount', 'interestAmount', 'status', 'select']
   totalDisplayedColumns: string[] = ['remainingCredit', 'creditLimit', 'dueDate', 'totalInterest']
   paidTransactionDisplayedColumns: string[] = ['id', 'transactionDate', 'description', 'amount']
+  paymentPlanDisplayedColumns: string[] = ['description', 'amount', 'interestType', 'appliedInterest', 'interestAmount', 'penaltyInterestRate', 'transactionDate', 'creditType', 'installments', 'dueDate'];
   totalDataSource = new MatTableDataSource<any>(this.customerTransactions);
   paidTransactionDataSource = new MatTableDataSource<any>(this.paidTransactions);
 
@@ -45,16 +48,21 @@ export class AccountBalanceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const customerId = Number(this.route.snapshot.paramMap.get('id'));
+    const customerId = this.getCustomerId();
     this.getPendingTransactionsByCustomer(customerId);
     this.getTransactionsByCustomerDetail(customerId);
     this.creditLimit = this.getCustomerCreditLimit(customerId)
     this.dueDate = this.getCustomerDueDate(customerId);
     this.getPaidTransactions(customerId);
+    this.calculateTotals();
   }
 
   cerrar() {
     this.authService.logOut();
+  }
+
+  getCustomerId() {
+    return Number(this.route.snapshot.paramMap.get('id'));
   }
 
 
@@ -109,11 +117,19 @@ export class AccountBalanceComponent implements OnInit {
   paySelectedTransactions() {
     const selectedTransactions = this.selection.selected;
     selectedTransactions.forEach(transaction => {
-      let updateData = "PAID";
-      this.transactionService.updateTransaction(transaction.id, updateData).subscribe();
-    });
-    this.selection.clear();
-}
+      const transactionId = transaction.id;
+      const transactionAmount = transaction.amount;
+      console.log(`Enviando pago para la transacción ID: ${transactionId} con monto: ${transactionAmount}`);
+      this.transactionService.postPaymentTransaction(this.getCustomerId(), transactionAmount, 'Pago para transacción ' + transactionId, 'PAYMENT', 0, 0, transactionId).subscribe(response => {
+        console.log('Payment posted successfully', response);
+        this.transactionService.updateTransaction(transactionId, 'PAID').subscribe(response => {
+          console.log('Transaction updated successfully', response);
+          this.getPendingTransactionsByCustomer(this.getCustomerId());
+          this.getPaidTransactions(this.getCustomerId());
+        });
+      });
+    })
+  }
 
   masterToggle() {
     this.isAllSelected() ?
@@ -133,6 +149,37 @@ export class AccountBalanceComponent implements OnInit {
         this.paidTransactions = transactions.transactions.filter((transaction: any) => transaction.status === 'PAID');
       } else {
         console.error('transactions is not an array:', transactions);
+      }
+    });
+  }
+
+  calculateTotals() {
+    const pendingTransactions = this.customerTransactions.filter(transaction => transaction.status === 'PENDING');
+    this.totalDebt = pendingTransactions.reduce((acc, transaction) => acc + transaction.amount, 0);
+    this.totalInterest = pendingTransactions.reduce((acc, transaction) => acc + transaction.interestAmount, 0);
+  }
+
+  
+
+  openPaymentPlanDialog() {
+    const pendingTransactions = this.customerTransactions.filter(transaction => transaction.status === 'PENDING');
+    console.log(this.customerTransactions);
+
+    let totalDebt = 0;
+    let totalInterest = 0;
+
+    pendingTransactions.forEach(transaction => {
+      totalDebt += transaction.amount;
+      totalInterest += transaction.interestAmount;
+    })
+    
+    this.dialog.open(PaymentPlanDialogComponent, {
+      width: '1000px',
+      panelClass: 'custom-dialog-container', // Agregar una clase personalizada
+      data: {
+        transactions: pendingTransactions,
+        totalDebt: totalDebt,
+        totalInterest: totalInterest
       }
     });
   }

@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Plan de Pagos</h2>
+<mat-dialog-content>
+  <table mat-table [dataSource]="transactions" class="mat-elevation-z8">
+    <ng-container matColumnDef="transactionDate">
+      <th mat-header-cell *matHeaderCellDef> Fecha de Transacción </th>
+      <td mat-cell *matCellDef="let element"> {{element.transactionDate}} </td>
+    </ng-container>
+    <ng-container matColumnDef="dueDate">
+      <th mat-header-cell *matHeaderCellDef> Fecha de Pago </th>
+      <td mat-cell *matCellDef="let element"> {{element.dueDate}} </td>
+    </ng-container>
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Monto </th>
+      <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+    </ng-container>
+    <ng-container matColumnDef="interestAmount">
+      <th mat-header-cell *matHeaderCellDef> Intereses </th>
+      <td mat-cell *matCellDef="let element"> {{element.interestAmount}} </td>
+    </ng-container>
+    <ng-container matColumnDef="installments">
+      <th mat-header-cell *matHeaderCellDef> Cuotas </th>
+      <td mat-cell *matCellDef="let element"> {{element.installments}} </td>
+    </ng-container>
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Descripción </th>
+      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container>
+    <ng-container matColumnDef="interestType">
+      <th mat-header-cell *matHeaderCellDef> Tipo de tasa </th>
+      <td mat-cell *matCellDef="let element"> {{element.interestType}} </td>
+    </ng-container>
+    <ng-container matColumnDef="creditType">
+      <th mat-header-cell *matHeaderCellDef> Tipo de pago </th>
+      <td mat-cell *matCellDef="let element"> {{element.creditType}} </td>
+    </ng-container>
+    <ng-container matColumnDef="penaltyInterestRate">
+      <th mat-header-cell *matHeaderCellDef> Tasa moratoria </th>
+      <td mat-cell *matCellDef="let element"> {{element.penaltyInterestRate + '%'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="appliedInterest">
+      <th mat-header-cell *matHeaderCellDef> Tasa de interés </th>
+      <td mat-cell *matCellDef="let element"> {{element.appliedInterest + '%'}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <div>Deuda acumulada: {{totalDebt}} </div>
+  <div>Intereses totales: {{totalInterest}} </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

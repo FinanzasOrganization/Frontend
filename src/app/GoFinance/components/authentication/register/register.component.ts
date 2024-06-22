@@ -8,6 +8,8 @@ import {Router, RouterLink} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {AuthService} from "../../../../core/services/auth.service";
+import { NgIf } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-register',
@@ -21,36 +23,36 @@ import {AuthService} from "../../../../core/services/auth.service";
     MatTooltip,
     RouterLink,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NgIf,
+    MatFormFieldModule
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
 
-  passwordTooltip: string = `
-    <ul>
-      <li>Letras y números</li>
-      <li>Debe combinar letras mayúsculas y minúsculas</li>
-      <li>Debe incluir caracteres especiales</li>
-      <li>La longitud de la contraseña debe ser igual o mayor a 8 caracteres</li>
-    </ul>
-  `;
+  registerForm!: FormGroup;
 
-  name: string = '';
-  lastname: string = '';
-  email: string = '';
-  password: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit() {}
-
-  register(): void {
-    this.authService.register(this.name, this.lastname, this.email, this.password).subscribe({
-      next: () => this.router.navigate(['/login']),
-      error: (err) => console.error('Register failed', err)
+  ngOnInit() {
+    this.registerForm = new FormGroup({
+      'name': new FormControl(null, [Validators.required, Validators.minLength(3)]),
+      'lastName': new FormControl(null, [Validators.required, Validators.min(3)]),
+      'email': new FormControl(null, [Validators.required, Validators.minLength(3)]),
+      'password': new FormControl(null, [Validators.required, Validators.min(8)]),
     });
   }
 
+  register(): void {
+      if (this.registerForm.valid) {
+        const { name, lastName, email, password } = this.registerForm.value;
+        this.authService.register(name, lastName, email, password).subscribe({
+        next: () => this.router.navigate(['/login']),
+        error: (err) => console.error('Register failed', err)
+      });
+    }
+  }
 }

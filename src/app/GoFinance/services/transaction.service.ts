@@ -10,9 +10,13 @@ export class TransactionService {
 
   constructor(private httpClient: HttpClient) { }
 
-  postTransaction(customerId: number, amount: number, description: string, creditType: string, interestRate: number, installments: number, interestType: string) {
+  postTransaction(customerId: number, amount: number, description: string, creditType: string, transactionType: string, interestRate: number, installments: number, interestType: string, tasaType: string, capitalizacionType: string) {
    
-    return this.httpClient.post(this.TRANSACTION_URL + '/' + customerId, {amount, description, creditType, interestRate, installments, interestType});
+    return this.httpClient.post(this.TRANSACTION_URL + '/' + customerId, {amount, description, creditType, transactionType, interestRate, installments, interestType, tasaType, capitalizacionType});
+  }
+
+  postPaymentTransaction(customerId: number, amount: number, description: string, transactionType: string, interestRate: number, installments: number, purchaseTransactionId: number) {
+    return this.httpClient.post(this.TRANSACTION_URL + '/' + customerId, {amount, description, transactionType, interestRate, installments, purchaseTransactionId});
   }
 
   getTransactions(id: number): Observable<any> {

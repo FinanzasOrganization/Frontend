@@ -1,5 +1,5 @@
 import { Component, OnInit} from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgIf } from '@angular/common';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatCalendar, MatDatepickerModule } from '@angular/material/datepicker';
 import {
@@ -50,7 +50,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatNativeDateModule,
     MatInputModule,
     MatFormFieldModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgIf
   ],
   templateUrl: './data-customer.component.html',
   styleUrl: './data-customer.component.css'

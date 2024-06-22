@@ -10,7 +10,6 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatNativeDateModule} from "@angular/material/core";
 import { RouterLink, RouterModule } from '@angular/router';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
-import { DialogComponent } from '../dialog/dialog.component';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerService } from '../../services/customer.service';
