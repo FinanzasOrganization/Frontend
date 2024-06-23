@@ -54,7 +54,6 @@ export class AccountBalanceComponent implements OnInit {
     this.creditLimit = this.getCustomerCreditLimit(customerId)
     this.dueDate = this.getCustomerDueDate(customerId);
     this.getPaidTransactions(customerId);
-    this.calculateTotals();
   }
 
   cerrar() {
@@ -92,6 +91,7 @@ export class AccountBalanceComponent implements OnInit {
     this.transactionService.getTransactions(customerId).subscribe(detail => {
       this.creditUsed = detail.creditUsed;
       this.totalInterest = detail.totalInterest;
+      this.totalDebt = detail.totalBalance;
       this.updateTotalDataSource();
     });
   }
@@ -151,12 +151,6 @@ export class AccountBalanceComponent implements OnInit {
         console.error('transactions is not an array:', transactions);
       }
     });
-  }
-
-  calculateTotals() {
-    const pendingTransactions = this.customerTransactions.filter(transaction => transaction.status === 'PENDING');
-    this.totalDebt = pendingTransactions.reduce((acc, transaction) => acc + transaction.amount, 0);
-    this.totalInterest = pendingTransactions.reduce((acc, transaction) => acc + transaction.interestAmount, 0);
   }
 
   
