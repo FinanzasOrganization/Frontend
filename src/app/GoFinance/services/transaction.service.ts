@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class TransactionService {
-  private TRANSACTION_URL = 'http://localhost:8090/api/go-finance/v1/transaction';
+  private TRANSACTION_URL = 'http://localhost:8080/api/go-finance/v1/transaction';
 
   constructor(private httpClient: HttpClient) { }
 

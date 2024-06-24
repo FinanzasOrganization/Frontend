@@ -7,8 +7,8 @@ import {Observable, tap} from "rxjs";
   providedIn: 'root'
 })
 export class AuthService {
-  private REGISTER_URL = 'http://localhost:8090/api/go-finance/v1/auth/signup';
-  private LOGIN_URL = 'http://localhost:8090/api/go-finance/v1/auth/login';
+  private REGISTER_URL = 'http://localhost:8080/api/go-finance/v1/auth/signup';
+  private LOGIN_URL = 'http://localhost:8080/api/go-finance/v1/auth/login';
   private tokenKey = 'authToken';
 
   constructor(private httpClient: HttpClient, private router: Router) { }
@@ -25,7 +25,7 @@ export class AuthService {
           this.setToken(response.access_token);
         }
         const userId = Number(response.user_id);
-        localStorage.setItem('user_id', userId.toString()); // Guardar user_id en el almacenamiento local
+        localStorage.setItem('user_id', userId.toString());
       })
     );
   }

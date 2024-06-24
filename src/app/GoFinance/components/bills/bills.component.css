@@ -1,6 +1,7 @@
 .container {
   display: flex;
-  height: 100vh;
+  flex-direction: row;
+  min-height: 100vh;
 }
 
 .main-content {
@@ -21,11 +22,13 @@
 
 .sidebar {
   width: 200px;
+  min-height: 100vh; /* Asegura que el sidebar tenga al menos la altura de la ventana del navegador */
   background-color: #1e3a8a;
   color: white;
   display: flex;
   flex-direction: column;
   padding: 16px;
+  overflow-y: auto;
 }
 
 .sidebar nav ul {
@@ -45,7 +48,6 @@
 
 .main-content {
   flex: 1;
-  padding: 16px;
   display: flex;
   flex-direction: column;
 }

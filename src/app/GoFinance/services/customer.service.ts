@@ -7,7 +7,7 @@ import { Observable, map } from 'rxjs';
 })
 export class CustomerService {
 
-  private CUSTOMER_URL = 'http://localhost:8090/api/go-finance/v1/customer';
+  private CUSTOMER_URL = 'http://localhost:8080/api/go-finance/v1/customer';
 
   constructor(private httpClient: HttpClient) { }
 
