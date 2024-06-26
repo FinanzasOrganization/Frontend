@@ -10,6 +10,8 @@ import {FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule} fr
 import {AuthService} from "../../../../core/services/auth.service";
 import { NgIf } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorDialogComponent } from '../../error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-register',
@@ -35,7 +37,7 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
 
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.registerForm = new FormGroup({
@@ -51,7 +53,16 @@ export class RegisterComponent implements OnInit {
         const { name, lastName, email, password } = this.registerForm.value;
         this.authService.register(name, lastName, email, password).subscribe({
         next: () => this.router.navigate(['/login']),
-        error: (err) => console.error('Register failed', err)
+        error: (err) => {
+          let errorMessage = '';
+          if (err.error.message === 'Ya existe un usuario con el email' + ' ' + email) {
+          errorMessage = 'Ya existe un usuario registrado con este correo';
+          }
+          this.dialog.open(ErrorDialogComponent, {
+          width: '500px',
+          data: errorMessage
+          });
+        }
       });
     }
   }

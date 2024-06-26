@@ -16,7 +16,7 @@
       <div class="form-group">
         <mat-form-field class="login-form">
           <label for="password">Contraseña</label>
-          <input matInput id="password" name="password" required formControlName="password">
+          <input matInput id="password" name="password" type="password" required formControlName="password">
           <mat-error *ngIf="loginForm.get('password')?.errors?.['required']">
             Ingrese una contraseña
           </mat-error>

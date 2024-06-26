@@ -21,6 +21,7 @@ import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { CustomerService } from '../../services/customer.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-data-customer',
@@ -73,7 +74,11 @@ export class DataCustomerComponent implements OnInit {
     });
   }
 
-  constructor(private customerService: CustomerService, private snackBar: MatSnackBar) {}
+  constructor(private customerService: CustomerService, private snackBar: MatSnackBar, private authService: AuthService) {}
+
+  cerrar() {
+    this.authService.logOut();
+  }
 
 
   futureDateValidator(control: AbstractControl): ValidationErrors | null {

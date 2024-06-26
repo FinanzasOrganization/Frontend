@@ -24,6 +24,7 @@ import { MatOption } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { CustomerService } from '../../services/customer.service';
 import { catchError, of } from 'rxjs';
+import { AuthService } from '../../../core/services/auth.service';
 
 interface Credit {
   value: string;
@@ -120,7 +121,7 @@ export class BillsComponent implements OnInit {
       'interestRate': new FormControl(null, [Validators.required, Validators.min(1)]),
       'interestType': new FormControl(null, [Validators.required, this.interestTypeValidator]),
       'tasaType': new FormControl(null, [Validators.required, this.tasaTypeValidator]),
-      'capitalizacion': new FormControl(null, [Validators.required, this.capitalizacionValidator]),
+      'capitalizacion': new FormControl(null, this.capitalizacionValidator),
       'installments': new FormControl(null),
       'description': new FormControl(null, Validators.required)
     });
@@ -130,7 +131,11 @@ export class BillsComponent implements OnInit {
     this.getAllCustomers();
   }
 
-  constructor(private transactionService: TransactionService, private customerService: CustomerService, private snackBar: MatSnackBar) {}
+  constructor(private transactionService: TransactionService, private customerService: CustomerService, private snackBar: MatSnackBar, private authService: AuthService) {}
+
+  cerrar() {
+    this.authService.logOut();
+  }
 
   toggleAmountPrefix() {
     this.showAmountPrefix = true;

@@ -13,6 +13,7 @@ import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/mat
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { CustomerService } from '../../services/customer.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 interface Cliente {
   nombre: string;
@@ -50,7 +51,8 @@ export class ClientsComponent implements OnInit {
   constructor(
     private router: Router,
     public dialog: MatDialog,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -58,7 +60,7 @@ export class ClientsComponent implements OnInit {
   }
 
   cerrar() {
-    sessionStorage.clear();
+    this.authService.logOut();
   }
 
   getAllCustomers() {
