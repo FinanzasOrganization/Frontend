@@ -209,7 +209,7 @@ export class BillsComponent implements OnInit {
         capitalizacion = 'DIARIA';
       }
 
-      // Obtén el cliente y sus transacciones
+      /* Obtén el cliente y sus transacciones
       this.customerService.getCustomerById(customerId).subscribe(customer => {
         this.transactionService.getTransactions(customerId).pipe(
           catchError(error => {
@@ -225,6 +225,7 @@ export class BillsComponent implements OnInit {
             console.error('Error posting transaction: This transaction exceeds the user\'s available credit');
             this.snackBar.open('Esta transacción excede el crédito disponible del usuario.', 'Cerrar', { duration: 3000 });
           } else {
+           */
             this.transactionService.postTransaction(customerId, amount, description, creditType, "PURCHASE", interestRate, installments, interestType, tasaType, capitalizacion)
               .subscribe(
                 response => {
@@ -232,15 +233,12 @@ export class BillsComponent implements OnInit {
                   this.snackBar.open('Venta registrada', 'Cerrar', { duration: 3000 });
                 },
                 error => {
-                  console.error('Error posting transaction', error);
-                  this.snackBar.open('Error al registrar la venta', 'Cerrar', { duration: 3000 });
+                  console.error('Credit limit exceeded', error);
+                  this.snackBar.open('Esta transacción excede el crédito disponible del usuario.', 'Cerrar', { duration: 3000 });
                 }
               );
           }
-        });
-      });
-    }
-  }
+        }
 
 
 }
