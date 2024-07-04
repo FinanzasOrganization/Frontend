@@ -240,5 +240,4 @@ export class BillsComponent implements OnInit {
           }
         }
 
-
 }

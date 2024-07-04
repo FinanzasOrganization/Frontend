@@ -28,9 +28,4 @@ export class TransactionService {
     return this.httpClient.get<any>(`${this.TRANSACTION_URL}/client/${clientId}`);
   }
 
-  updateTransaction(transactionId: number, status: string): Observable<any> {
-    const headers = { 'Content-Type': 'application/json' };
-    return this.httpClient.put(`${this.TRANSACTION_URL}/${transactionId}`, JSON.stringify(status), { headers });
-  }
-
 }

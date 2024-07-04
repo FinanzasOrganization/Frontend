@@ -37,6 +37,7 @@ export class AccountBalanceComponent implements OnInit {
   paymentPlanDisplayedColumns: string[] = ['description', 'amount', 'interestType', 'appliedInterest', 'interestAmount', 'penaltyInterestRate', 'transactionDate', 'creditType', 'installments', 'dueDate'];
   totalDataSource = new MatTableDataSource<any>(this.customerTransactions);
   paidTransactionDataSource = new MatTableDataSource<any>(this.paidTransactions);
+  private pollingInternal: any;
 
   constructor(
     private router: Router, 
@@ -48,6 +49,14 @@ export class AccountBalanceComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const storedTotalDebt = localStorage.getItem('totalDebt');
+    const storedTotalInterest = localStorage.getItem('totalInterest');
+    if (storedTotalDebt) {
+      this.totalDebt = parseFloat(storedTotalDebt);
+    }
+    if (storedTotalInterest) {
+      this.totalInterest = parseFloat(storedTotalInterest);
+    }
     const customerId = this.getCustomerId();
     this.getPendingTransactionsByCustomer(customerId);
     this.getTransactionsByCustomerDetail(customerId);
@@ -81,9 +90,10 @@ export class AccountBalanceComponent implements OnInit {
 
   getPendingTransactionsByCustomer(customerId: number) {
     this.transactionService.getTransactions(customerId).subscribe(transactions => {
-      this.customerTransactions = transactions.transactions.filter((transaction: any) => transaction.status === 'PENDING');
+      // Filtrar solo transacciones pendientes y de tipo compra
+      this.customerTransactions = transactions.transactions.filter((transaction: any) => 
+        transaction.status === 'PENDING' && transaction.transactionType === 'PURCHASE');
       this.dataSource.data = this.customerTransactions;
-      
     });
   }
 
@@ -119,16 +129,25 @@ export class AccountBalanceComponent implements OnInit {
     selectedTransactions.forEach(transaction => {
       const transactionId = transaction.id;
       const transactionAmount = transaction.amount;
+      const transactionInterestAmount = transaction.interestAmount || 0;
       console.log(`Enviando pago para la transacción ID: ${transactionId} con monto: ${transactionAmount}`);
-      this.transactionService.postPaymentTransaction(this.getCustomerId(), transactionAmount, 'Pago para transacción ' + transactionId, 'PAYMENT', 0, 0, transactionId).subscribe(response => {
-        console.log('Payment posted successfully', response);
-        this.transactionService.updateTransaction(transactionId, 'PAID').subscribe(response => {
-          console.log('Transaction updated successfully', response);
-          this.getPendingTransactionsByCustomer(this.getCustomerId());
-          this.getPaidTransactions(this.getCustomerId());
-        });
+  
+      this.transactionService.postPaymentTransaction(this.getCustomerId(), transactionAmount, 'Pago para transacción ' + transactionId, 'PAYMENT', 0, 0, transactionId).subscribe(() => {
+        console.log('Payment posted successfully');
+  
+        // Paso 1 y 3: Actualizar el totalDebt y el totalInterest y guardar en el almacenamiento local
+        this.totalDebt -= transactionAmount;
+        this.totalInterest -= transactionInterestAmount;
+  
+        localStorage.setItem('totalDebt', this.totalDebt.toString());
+        localStorage.setItem('totalInterest', this.totalInterest.toString());
+  
+        this.dataSource.data = this.dataSource.data.filter(t => t.id !== transactionId);
+        this.totalDataSource.data = this.totalDataSource.data.filter(t => t.id !== transactionId);
+  
+        this.getPaidTransactions(this.getCustomerId());
       });
-    })
+    });
   }
 
   masterToggle() {
@@ -146,7 +165,7 @@ export class AccountBalanceComponent implements OnInit {
   getPaidTransactions(customerId: number) {
     this.transactionService.getTransactions(customerId).subscribe((transactions: any) => {
       if (Array.isArray(transactions.transactions)) {
-        this.paidTransactions = transactions.transactions.filter((transaction: any) => transaction.status === 'PAID');
+        this.paidTransactions = transactions.transactions.filter((transaction: any) => transaction.transactionType === 'PAYMENT');
       } else {
         console.error('transactions is not an array:', transactions);
       }
@@ -156,29 +175,32 @@ export class AccountBalanceComponent implements OnInit {
   
 
   openPaymentPlanDialog() {
-    const pendingTransactions = this.customerTransactions.filter(transaction => transaction.status === 'PENDING');
+    const pendingPurchaseTransactions = this.customerTransactions.filter(transaction => 
+      transaction.status === 'PENDING' && transaction.transactionType === 'PURCHASE');
     console.log(this.customerTransactions);
-
+  
     let totalDebt = 0;
     let totalInterest = 0;
-
-    pendingTransactions.forEach(transaction => {
+  
+    pendingPurchaseTransactions.forEach(transaction => {
       totalDebt += transaction.amount;
       totalInterest += transaction.interestAmount;
-    })
+    });
+  
+    // Actualizar las propiedades del componente
+    this.totalDebt = totalDebt;
+    this.totalInterest = totalInterest;
     
     this.dialog.open(PaymentPlanDialogComponent, {
       width: '1000px',
-      panelClass: 'custom-dialog-container', // Agregar una clase personalizada
+      panelClass: 'custom-dialog-container',
       data: {
-        transactions: pendingTransactions,
+        transactions: pendingPurchaseTransactions,
         totalDebt: totalDebt,
         totalInterest: totalInterest
       }
     });
   }
-
-  @Output() totalSpendEmitter = new EventEmitter<any>();
 
 
 }

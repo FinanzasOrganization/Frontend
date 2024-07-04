@@ -53,7 +53,7 @@ interface Venta {
   styleUrl: './historial.component.css'
 })
 export class HistorialComponent implements OnInit {
-  displayedColumns: string[] = ['customerName', 'creditLimit', 'dueDate', 'creditType', 'amount'];
+  displayedColumns: string[] = ['customerName', 'creditLimit', 'dueDate', 'creditType', 'status', 'amount'];
   transactions: any[] = [];
   dataSource = new MatTableDataSource<any>(this.transactions);
 
@@ -76,9 +76,9 @@ export class HistorialComponent implements OnInit {
 
 
   getAllTransactions(): void {
-    this.transactionService.getAllTransactions().subscribe(transactions => {
-      this.transactions = transactions;
-      this.dataSource.data = this.transactions; // Actualiza los datos del dataSource
+    this.transactionService.getAllTransactions().subscribe((transactions: any[]) => {
+      this.transactions = transactions.filter((transaction: any) => transaction.status === "PENDING");
+      this.dataSource.data = this.transactions;
     });
   }
   
